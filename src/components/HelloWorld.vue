@@ -5,33 +5,50 @@
       Chinese: Tanggal {{ chineseDate.day }} Bulan {{ chineseDate.month }}
     </h2>
 
-    <input type="date" v-model="selectedDate">
-    <button v-on:click=""> Select </button>
-    <h2 v>
-      Chinese: Tanggal {{ selectChineseDate.day }} Bulan {{ selectChineseDate.month }}
+    <input type="date" v-model="selectedDate" />
+    <button @click="selectDate()">Select</button>
+    <h2 v-if="selectChineseDate">
+      Chinese: Tanggal {{ selectChineseDate.day }} Bulan
+      {{ selectChineseDate.month }}
     </h2>
   </div>
 </template>
 
 <script>
 import { CalendarChinese } from 'date-chinese';
+const calendarChinese = new CalendarChinese();
 
 export default {
-  todayDate: null,
-  chineseDate: null,
-  selectedDate: null,
-  selectChineseDate: null,
-  created() {
-    const calendarChinese = new CalendarChinese();
-    this.todayDate = new Date('2022 June 19');
-    this.chineseDate = calendarChinese.fromDate(this.todayDate);
-    console.log(this.chineseDate);
+  data() {
+    return {
+      todayDate: new Date(),
+      chineseDate: calendarChinese.fromDate(new Date()),
+      selectedDate: null,
+      selectChineseDate: null,
+    };
   },
+
+  created() {
+    this.todayDate = new Date();
+    this.chineseDate = calendarChinese.fromDate(this.todayDate);
+  },
+
   methods: {
     selectDate() {
-      this.selectChineseDate = calendarChinese.fromDate(this.selectDate)
-    }
-  }
+      this.selectChineseDate = calendarChinese.fromDate(
+        new Date(this.selectedDate)
+      );
+    },
+  },
+
+  computed: {
+    // chineseDate() {
+    //   return calendarChinese.fromDate(this.todayDate);
+    // },
+    // selectChineseDate() {
+    //   return calendarChinese.fromDate(new Date(this.selectedDate));
+    // },
+  },
 };
 </script>
 
